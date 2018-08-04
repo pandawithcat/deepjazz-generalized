@@ -6,7 +6,7 @@ Purpose:    Provide pruning and cleanup functions.
 Code adapted from Evan Chow's jazzml, https://github.com/evancchow/jazzml 
 with express permission.
 '''
-from itertools import izip_longest
+from itertools import zip_longest
 import random
 
 from music21 import *
@@ -33,7 +33,7 @@ def __roundUpDown(num, mult, upDown):
     length. '''
 def __grouper(iterable, n, fillvalue=None):
     args = [iter(iterable)] * n
-    return izip_longest(*args, fillvalue=fillvalue)
+    return zip_longest(*args, fillvalue=fillvalue)
 
 #----------------------------PUBLIC FUNCTIONS----------------------------------#
 

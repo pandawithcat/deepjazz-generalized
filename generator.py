@@ -31,8 +31,9 @@ import lstm
 ''' Helper function to sample an index from a probability array '''
 def __sample(a, temperature=1.0):
     a = np.log(a) / temperature
-    a = np.exp(a) / np.sum(np.exp(a))
-    return np.argmax(np.random.multinomial(1, a, 1))
+    dist = np.exp(a)/np.sum(np.exp(a))
+    choices = range(len(a))
+    return np.random.choice(choices, p=dist)
 
 ''' Helper function to generate a predicted value from a given matrix '''
 def __predict(model, x, indices_val, diversity):
@@ -50,7 +51,7 @@ def __generate_grammar(model, corpus, abstract_grammars, values, val_indices,
     curr_grammar = ''
     # np.random.randint is exclusive to high
     start_index = np.random.randint(0, len(corpus) - max_len)
-    sentence = corpus[start_index: start_index + max_len]    # seed
+    sentence = corpus[start_index: start_index + max_len]	# seed
     running_length = 0.0
     while running_length <= 4.1:    # arbitrary, from avg in input file
         # transform sentence (previous sequence) to matrix
@@ -104,7 +105,7 @@ def generate(data_fn, out_fn, N_epochs):
     bpm = 130
 
     # get data
-    chords, abstract_grammars = get_musical_data(data_fn)
+    abstract_grammars = get_musical_data(data_fn)
     corpus, values, val_indices, indices_val = get_corpus_data(abstract_grammars)
     print('corpus length:', len(corpus))
     print('total # of values:', len(values))
@@ -118,13 +119,9 @@ def generate(data_fn, out_fn, N_epochs):
 
     # generation loop
     curr_offset = 0.0
-    loopEnd = len(chords)
+    loopEnd = len(abstract_grammars)
+    print(loopEnd)
     for loopIndex in range(1, loopEnd):
-        # get chords from file
-        curr_chords = stream.Voice()
-        for j in chords[loopIndex]:
-            curr_chords.insert((j.offset % 4), j)
-
         # generate grammar
         curr_grammar = __generate_grammar(model=model, corpus=corpus, 
                                           abstract_grammars=abstract_grammars, 
@@ -134,12 +131,13 @@ def generate(data_fn, out_fn, N_epochs):
                                           diversity=diversity)
 
         curr_grammar = curr_grammar.replace(' A',' C').replace(' X',' C')
+        curr_grammar = curr_grammar.replace('0X', '0 X')
 
         # Pruning #1: smoothing measure
         curr_grammar = prune_grammar(curr_grammar)
 
         # Get notes from grammar and chords
-        curr_notes = unparse_grammar(curr_grammar, curr_chords)
+        curr_notes = unparse_grammar(curr_grammar)
 
         # Pruning #2: removing repeated and too close together notes
         curr_notes = prune_notes(curr_notes)
@@ -154,16 +152,10 @@ def generate(data_fn, out_fn, N_epochs):
         # insert into the output stream
         for m in curr_notes:
             out_stream.insert(curr_offset + m.offset, m)
-        for mc in curr_chords:
-            out_stream.insert(curr_offset + mc.offset, mc)
 
         curr_offset += 4.0
 
     out_stream.insert(0.0, tempo.MetronomeMark(number=bpm))
-
-    # Play the final stream through output (see 'play' lambda function above)
-    play = lambda x: midi.realtime.StreamPlayer(x).play()
-    play(out_stream)
 
     # save stream
     mf = midi.translate.streamToMidiFile(out_stream)
@@ -172,7 +164,7 @@ def generate(data_fn, out_fn, N_epochs):
     mf.close()
 
 ''' Runs generate() -- generating, playing, then storing a musical sequence --
-    with the default Metheny file. '''
+    with the file in input. '''
 def main(args):
     try:
         N_epochs = int(args[1])
@@ -180,8 +172,8 @@ def main(args):
         N_epochs = 128 # default
 
     # i/o settings
-    data_fn = 'midi/' + 'original_metheny.mid' # 'And Then I Knew' by Pat Metheny 
-    out_fn = 'midi/' 'deepjazz_on_metheny...' + str(N_epochs)
+    data_fn = 'midi/' + 'ddlc-your-reality.mid' # type in the song we are running deepjazz on!
+    out_fn = 'midi/' 'deepjazz_on_ddlc-your-reality...' + str(N_epochs) # where the returning midi file is saved to
     if (N_epochs == 1): out_fn += '_epoch.midi'
     else:               out_fn += '_epochs.midi'
 
