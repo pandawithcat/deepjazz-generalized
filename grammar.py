@@ -1,4 +1,5 @@
 '''
+Modified by: Echo Dot Product
 Author:     Ji-Sung Kim, Evan Chow
 Project:    jazzml / (used in) deepjazz
 Purpose:    Extract, manipulate, process musical grammar

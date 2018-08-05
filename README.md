@@ -1,4 +1,7 @@
-Note: deepjazz has been succeeded by [**songbird.ai**](http://songbird.ai) and is no longer being actively developed. 
+This was modified by Echo Dot Product.
+
+***
+This generalized the code created by Ji-Sung Kim to allow for the usage of other MIDI files than the default one. The majority of this code was created by him!
 
 ***
 

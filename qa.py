@@ -1,4 +1,5 @@
 '''
+Modified by: Echo Dot Product
 Author:     Ji-Sung Kim, Evan Chow
 Project:    deepjazz
 Purpose:    Provide pruning and cleanup functions.

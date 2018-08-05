@@ -1,4 +1,5 @@
 '''
+Modified by: Echo Dot Product
 Author:     Ji-Sung Kim
 Project:    deepjazz
 Purpose:    Builds an LSTM, a type of recurrent neural network (RNN). 

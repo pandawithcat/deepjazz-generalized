@@ -1,4 +1,6 @@
 '''
+Modified by: Echo Dot Product!
+ORIGINAL DOCSTRING:
 Author:     Ji-Sung Kim
 Project:    deepjazz
 Purpose:    Generate jazz using a deep learning model (LSTM in deepjazz).
@@ -172,8 +174,8 @@ def main(args):
         N_epochs = 128 # default
 
     # i/o settings
-    data_fn = 'midi/' + 'ddlc-your-reality.mid' # type in the song we are running deepjazz on!
-    out_fn = 'midi/' 'deepjazz_on_ddlc-your-reality...' + str(N_epochs) # where the returning midi file is saved to
+    data_fn = 'midi/' + 'music-b.mid' # type in the song we are running deepjazz on!
+    out_fn = 'midi/' 'deepjazz_on_music-b...' + str(N_epochs) # where the returning midi file is saved to
     if (N_epochs == 1): out_fn += '_epoch.midi'
     else:               out_fn += '_epochs.midi'
 
