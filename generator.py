@@ -100,7 +100,7 @@ def __generate_grammar(model, corpus, abstract_grammars, values, val_indices,
 def generate(data_fn, out_fn, N_epochs):
     # model settings
     max_len = 20
-    max_tries = 1000
+    max_tries = 200
     diversity = 0.5
 
     # musical settings
@@ -174,8 +174,8 @@ def main(args):
         N_epochs = 128 # default
 
     # i/o settings
-    data_fn = 'midi/' + 'music-b.mid' # type in the song we are running deepjazz on!
-    out_fn = 'midi/' 'deepjazz_on_music-b...' + str(N_epochs) # where the returning midi file is saved to
+    data_fn = 'midi/' + 'zion_t.mid' # type in the song we are running deepjazz on!
+    out_fn = 'midi/' 'deepjazz_on_zion_t' + str(N_epochs) # where the returning midi file is saved to
     if (N_epochs == 1): out_fn += '_epoch.midi'
     else:               out_fn += '_epochs.midi'
 
